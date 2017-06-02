@@ -1,6 +1,5 @@
 require "currency_conversion/version"
 require "currency_conversion/cbr"
-require 'pry'
 
 module CurrencyConversion
 	class Calculations
