@@ -3,32 +3,42 @@ require "currency_conversion/cbr"
 
 module CurrencyConversion
 	class Calculations
-		def calc(from, amount, to, precision)
+		def initialize(from, amount, to, precision)
+			@from = from
+			@amount = amount
+			@to = to
+			@precision = precision
+		end
 
-			upcase_from = from.upcase
-			@obj = CurrencyConversion::Cbr.new
+		def calc
+			upcase_from = @from.upcase
+			@obj = Calculations.cbr
 			
 			out = {}
 			if upcase_from == 'RUB'
-				to.each do |cur|
+				@to.each do |cur|
 					cur_up = cur.upcase
-					rez = amount.to_f / @obj.data[:"#{cur_up}"][1].to_f * @obj.data[:"#{cur_up}"][0].to_f
-					out.merge!("#{cur_up}": rez.round(precision))
+					rez = @amount.to_f / @obj[:"#{cur_up}"][1].to_f * @obj[:"#{cur_up}"][0].to_f
+					out.merge!("#{cur_up}": rez.round(@precision))
 				end
 			else
-				to.each do |cur|
+				@to.each do |cur|
 					cur_up = cur.upcase
 					if cur_up == 'RUB'
-						rez = @obj.data[:"#{upcase_from}"][1].to_f * amount.to_f / @obj.data[:"#{upcase_from}"][0].to_f
-						out.merge!("#{cur_up}": rez.round(precision))
+						rez = @obj[:"#{upcase_from}"][1].to_f * @amount.to_f / @obj[:"#{upcase_from}"][0].to_f
+						out.merge!("#{cur_up}": rez.round(@precision))
 					else
-						from_rub = @obj.data[:"#{upcase_from}"][1].to_f * amount.to_f / @obj.data[:"#{upcase_from}"][0].to_f
-						rez = from_rub / @obj.data[:"#{cur_up}"][1].to_f * @obj.data[:"#{cur_up}"][0].to_f
-						out.merge!("#{cur_up}": rez.round(precision))
+						from_rub = @obj[:"#{upcase_from}"][1].to_f * @amount.to_f / @obj[:"#{upcase_from}"][0].to_f
+						rez = from_rub / @obj[:"#{cur_up}"][1].to_f * @obj[:"#{cur_up}"][0].to_f
+						out.merge!("#{cur_up}": rez.round(@precision))
 					end
 				end
 			end
 			out
+		end
+
+		def self.cbr
+			CurrencyConversion::Cbr.new.data
 		end
 	end
 end

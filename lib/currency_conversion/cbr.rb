@@ -4,6 +4,7 @@ require 'open-uri'
 
 module CurrencyConversion
 	class Cbr
+
 		def data
 			data_load
 		end
