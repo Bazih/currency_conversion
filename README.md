@@ -19,7 +19,8 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-object = CurrencyConversion::Calculations.new('EUR', 20, ['RUB', 'USD'], 5).calc
+calculation = CurrencyConversion::Calculations.new
+calculation.calc('EUR', 20, ['RUB', 'USD'], 5)
 ```
 
 ## Development
