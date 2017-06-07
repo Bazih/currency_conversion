@@ -1,5 +1,7 @@
 require 'currency_conversion/version'
 require 'currency_conversion/cbr'
+require 'currency_conversion/storage_cache'
+require 'date'
 
 module CurrencyConversion
   class Calculations
@@ -26,7 +28,10 @@ module CurrencyConversion
     private
 
     def self.cbr
-      CurrencyConversion::Cbr.new.data
+      today 	= Date.today.strftime('%d.%m.%Y')
+      storage = CurrencyConversion::StorageCache.new
+      cbr 		= CurrencyConversion::Cbr.new
+      storage.get(today, cbr.data(today))
     end
 
     def upcase_params(from, to)
